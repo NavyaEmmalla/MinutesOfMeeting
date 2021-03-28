@@ -6,7 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.example.MoM.dto.OrganizationMemberDto;
+import com.example.MoM.dto.formDto.MeetingFormDto;
+import com.example.MoM.dto.formDto.MemberFormDto;
+import com.example.MoM.dto.formDto.registerDto.RegisterFormDto;
+import com.example.MoM.entity.OrganizationMeetingEntity;
 import com.example.MoM.entity.OrganizationMemberEntity;
 
 @SpringBootApplication
@@ -20,15 +23,31 @@ public class MinutesOfMeetingApplication {
 	public ModelMapper createModelMapper() {
 		ModelMapper mapper = new ModelMapper();
 
-		mapper.addMappings(new PropertyMap<OrganizationMemberEntity, OrganizationMemberDto>() {
+		mapper.addMappings(new PropertyMap<RegisterFormDto, OrganizationMemberEntity>() {
 
 			@Override
 			protected void configure() {
-				map().setOrganizationName(source.getOrganizationEntity().getOrganizationName());
+				map().setOrganizationRole(source.getRole());
+				map().setMemberName(source.getName());
 			}
 		});
-		
-		
+
+		mapper.addMappings(new PropertyMap<MemberFormDto, OrganizationMemberEntity>() {
+
+			@Override
+			protected void configure() {
+				map().setOrganizationRole(source.getRole());
+			}
+		});
+
+		mapper.addMappings(new PropertyMap<MeetingFormDto, OrganizationMeetingEntity>() {
+
+			@Override
+			protected void configure() {
+				map().setMeetingName(source.getName());
+			}
+		});
+
 		return mapper;
 	}
 
